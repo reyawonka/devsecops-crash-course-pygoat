@@ -1,3 +1,4 @@
+
 # Use a newer and stable base image
 FROM python:3.11-slim-bullseye
 
@@ -5,8 +6,10 @@ FROM python:3.11-slim-bullseye
 WORKDIR /app
 
 # Install system dependencies
-# Removed dnsutils and only kept libpq-dev and python3-dev
+# Add build-essential, gcc, and PostgreSQL development libraries required for psycopg2
 RUN apt-get update && apt-get install --no-install-recommends -y \
+    gcc \
+    build-essential \
     libpq-dev \
     python3-dev && \
     apt-get clean && \
@@ -35,4 +38,3 @@ WORKDIR /app/pygoat/
 
 # Start the application with Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "6", "pygoat.wsgi"]
-
